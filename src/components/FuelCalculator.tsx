@@ -36,6 +36,14 @@ const FuelCalculator = () => {
     setFuelUsed(parseFloat(fuelUsedValue.toFixed(2))); // Ustawienie zużytego paliwa
   };
 
+  const clear = () => {
+    setAverageConsumption('');
+    setDistanceTraveled('');
+    setInitialFuel('');
+    setRemainingFuel(null); 
+    setFuelUsed(null);
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Fuel Kalkulator</Text>
@@ -58,7 +66,7 @@ const FuelCalculator = () => {
 
       <View style={styles.buttonContainer}>
         <Button title="Oblicz paliwo" onPress={calculateRemainingFuel} />
-        <TouchableOpacity style={styles.buttonClear} onPress={() => { setRemainingFuel(null); setFuelUsed(null); }}>
+        <TouchableOpacity style={styles.buttonClear} onPress={clear}>
           <Text>Czyść</Text>
         </TouchableOpacity>
       </View>
