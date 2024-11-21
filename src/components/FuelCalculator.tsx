@@ -12,6 +12,7 @@ const FuelCalculator = () => {
   const [distanceTraveled, setDistanceTraveled] = useState<string>('');
   const [initialFuel, setInitialFuel] = useState<string>('');
   const [remainingFuel, setRemainingFuel] = useState<number | null>(null);
+  const [fuelUsed, setFuelUsed] = useState<number | null>(null); // Nowa zmienna stanu dla zużytego paliwa
 
   useEffect(() => {
     calculateRemainingFuel();
@@ -25,12 +26,14 @@ const FuelCalculator = () => {
     // Sprawdzenie, czy jakiekolwiek wymagane dane są brakujące
     if (isNaN(avgConsumption) || isNaN(distance) || isNaN(initial)) {
       setRemainingFuel(null);
+      setFuelUsed(null); // Ustawienie zużytego paliwa na null, gdy dane są nieprawidłowe
       return;
     }
 
-    const fuelUsed = (avgConsumption * distance) / 100;
-    const fuelLeft = initial - fuelUsed;
+    const fuelUsedValue = (avgConsumption * distance) / 100;
+    const fuelLeft = initial - fuelUsedValue;
     setRemainingFuel(parseFloat(fuelLeft.toFixed(2)));
+    setFuelUsed(parseFloat(fuelUsedValue.toFixed(2))); // Ustawienie zużytego paliwa
   };
 
   return (
@@ -55,13 +58,16 @@ const FuelCalculator = () => {
 
       <View style={styles.buttonContainer}>
         <Button title="Oblicz paliwo" onPress={calculateRemainingFuel} />
-        <TouchableOpacity style={styles.buttonClear} onPress={() => setRemainingFuel(null)}>
+        <TouchableOpacity style={styles.buttonClear} onPress={() => { setRemainingFuel(null); setFuelUsed(null); }}>
           <Text>Czyść</Text>
         </TouchableOpacity>
       </View>
      
       {remainingFuel !== null && (
-        <Text style={styles.result}>Zostało paliwa: {remainingFuel} litry</Text>
+        <View>
+          <Text style={styles.result}>Zostało paliwa: {remainingFuel} litry</Text>
+          <Text style={styles.result}>Spalone paliwo: {fuelUsed} litry</Text> 
+        </View>
       )}
     </View>
   );
@@ -123,7 +129,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
   },
   result: {
-    marginTop: 20,
+    marginTop: 10,
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
