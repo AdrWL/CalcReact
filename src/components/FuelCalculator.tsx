@@ -1,56 +1,65 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+
+interface InputFieldProps {
+  label: string;
+  value: string;
+  onChangeText: (text: string) => void;
+}
 
 const FuelCalculator = () => {
-  const [averageConsumption, setAverageConsumption] = useState('');
-  const [distanceTraveled, setDistanceTraveled] = useState('');
-  const [initialFuel, setInitialFuel] = useState('');
-  const [remainingFuel, setRemainingFuel] = useState(null);
+  const [averageConsumption, setAverageConsumption] = useState<string>('');
+  const [distanceTraveled, setDistanceTraveled] = useState<string>('');
+  const [initialFuel, setInitialFuel] = useState<string>('');
+  const [remainingFuel, setRemainingFuel] = useState<number | null>(null);
+
+  useEffect(() => {
+    calculateRemainingFuel();
+  }, [initialFuel, distanceTraveled, averageConsumption]);
 
   const calculateRemainingFuel = () => {
-    // Oblicz zużyte paliwo
-    const fuelUsed = (parseFloat(averageConsumption) * parseFloat(distanceTraveled)) / 100;
-    // Oblicz pozostałe paliwo
-    const fuelLeft = parseFloat(initialFuel) - fuelUsed;
-    // Zapisz wynik (zaokrąglony do 2 miejsc)
-    setRemainingFuel(fuelLeft.toFixed(2));
+    const avgConsumption = parseFloat(averageConsumption);
+    const distance = parseFloat(distanceTraveled);
+    const initial = parseFloat(initialFuel);
+
+    // Sprawdzenie, czy jakiekolwiek wymagane dane są brakujące
+    if (isNaN(avgConsumption) || isNaN(distance) || isNaN(initial)) {
+      setRemainingFuel(null);
+      return;
+    }
+
+    const fuelUsed = (avgConsumption * distance) / 100;
+    const fuelLeft = initial - fuelUsed;
+    setRemainingFuel(parseFloat(fuelLeft.toFixed(2)));
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Fuel Kalkulator</Text>
 
-      {/* Input for Average Consumption */}
-      <TextInput
-        style={styles.input}
-        placeholder="Spalanie na 100 (L/100km)"
-        keyboardType="numeric"
-        value={averageConsumption}
-        onChangeText={setAverageConsumption}
+      <InputField 
+        label="Spalanie na 100 (L/100km)" 
+        value={averageConsumption} 
+        onChangeText={setAverageConsumption} 
+      />
+      <InputField 
+        label="Odległość przejechana (km)" 
+        value={distanceTraveled} 
+        onChangeText={setDistanceTraveled} 
+      />
+      <InputField 
+        label="Paliwo początkowe (L)" 
+        value={initialFuel} 
+        onChangeText={setInitialFuel} 
       />
 
-      {/* Input for Distance Traveled */}
-      <TextInput
-        style={styles.input}
-        placeholder="Dystans (km)"
-        keyboardType="numeric"
-        value={distanceTraveled}
-        onChangeText={setDistanceTraveled}
-      />
-
-      {/* Input for Initial Fuel */}
-      <TextInput
-        style={styles.input}
-        placeholder="Ile w zbiorniku (L)"
-        keyboardType="numeric"
-        value={initialFuel}
-        onChangeText={setInitialFuel}
-      />
-
-      {/* Button to Calculate */}
-      <Button title="Oblicz paliwo" onPress={calculateRemainingFuel} />
-
-      {/* Display Result */}
+      <View style={styles.buttonContainer}>
+        <Button title="Oblicz paliwo" onPress={calculateRemainingFuel} />
+        <TouchableOpacity style={styles.buttonClear} onPress={() => setRemainingFuel(null)}>
+          <Text>Czyść</Text>
+        </TouchableOpacity>
+      </View>
+     
       {remainingFuel !== null && (
         <Text style={styles.result}>Zostało paliwa: {remainingFuel} litry</Text>
       )}
@@ -58,11 +67,23 @@ const FuelCalculator = () => {
   );
 };
 
+const InputField = ({ label, value, onChangeText }: InputFieldProps) => (
+  <>
+    <Text>{label}</Text>
+    <TextInput
+      style={styles.input}
+      placeholder={label}
+      keyboardType="numeric"
+      value={value}
+      onChangeText={onChangeText}
+    />
+  </>
+);
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    justifyContent: 'center',
     backgroundColor: '#f5f5f5',
   },
   title: {
@@ -79,6 +100,27 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     fontSize: 16,
     backgroundColor: '#fff',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between', 
+    alignItems: 'center',
+  },
+  buttonClear: {
+    width: "50%",
+    backgroundColor: '#FF5733',
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
   result: {
     marginTop: 20,
