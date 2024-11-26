@@ -1,16 +1,30 @@
-import { View } from "react-native";
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import FuelCalculator from '../components/FuelCalculator';
+import { Calc } from '../components/Calc'; 
 
-export default function Index() {
+const Stack = createNativeStackNavigator();
+
+export default function App() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+          title: "",
+          headerBackTitle: "",
+          headerShadowVisible: false,
+       }}
+        initialRouteName="FuelCalculator"
     >
-      <FuelCalculator />
-    </View>
+        <Stack.Screen 
+          name="FuelCalculator" 
+          component={FuelCalculator} 
+        />
+        <Stack.Screen 
+          name="Calc" 
+          component={Calc} 
+          options={{ title: 'Calc' }} 
+        />
+      </Stack.Navigator>
   );
 }
