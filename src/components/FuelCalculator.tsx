@@ -1,98 +1,70 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 
-interface InputFieldProps {
-  label: string;
-  value: string;
-  onChangeText: (text: string) => void;
+interface FormData {
+  averageConsumption: string;
+  distanceTraveled: string;
+  initialFuel: string;
 }
 
-const FuelCalculator = () => {
-  const [averageConsumption, setAverageConsumption] = useState<string>('');
-  const [distanceTraveled, setDistanceTraveled] = useState<string>('');
-  const [initialFuel, setInitialFuel] = useState<string>('');
-  const [remainingFuel, setRemainingFuel] = useState<number | null>(null);
-  const [fuelUsed, setFuelUsed] = useState<number | null>(null); // Nowa zmienna stanu dla zużytego paliwa
-
-  useEffect(() => {
-    calculateRemainingFuel();
-  }, [initialFuel, distanceTraveled, averageConsumption]);
-
-  const calculateRemainingFuel = () => {
-    const avgConsumption = parseFloat(averageConsumption);
-    const distance = parseFloat(distanceTraveled);
-    const initial = parseFloat(initialFuel);
-
-    // Sprawdzenie, czy jakiekolwiek wymagane dane są brakujące
-    if (isNaN(avgConsumption) || isNaN(distance) || isNaN(initial)) {
-      setRemainingFuel(null);
-      setFuelUsed(null); // Ustawienie zużytego paliwa na null, gdy dane są nieprawidłowe
-      return;
-    }
-
-    const fuelUsedValue = (avgConsumption * distance) / 100;
-    const fuelLeft = initial - fuelUsedValue;
-    setRemainingFuel(parseFloat(fuelLeft.toFixed(2)));
-    setFuelUsed(parseFloat(fuelUsedValue.toFixed(2))); // Ustawienie zużytego paliwa
+export const FuelCalculator = () => {
+  const initialState = {
+    averageConsumption: '',
+    distanceTraveled: '',
+    initialFuel: '',
   };
 
+  const [formData, setFormData] = useState<FormData>(initialState);
+  const [remainingFuel, setRemainingFuel] = useState<number | null>(null);
+  const [fuelUsed, setFuelUsed] = useState<number | null>(null);
+
+  useEffect(() => {
+    const avg = parseFloat(formData.averageConsumption);
+    const distance = parseFloat(formData.distanceTraveled);
+    const initial = parseFloat(formData.initialFuel);
+    if (!isNaN(avg) && !isNaN(distance) && !isNaN(initial)) {
+      const used = (avg * distance) / 100;
+      setRemainingFuel(parseFloat((initial - used).toFixed(2)));
+      setFuelUsed(parseFloat(used.toFixed(2)));
+    } else {
+      setRemainingFuel(null);
+      setFuelUsed(null);
+    }
+  }, [formData]);
+
   const clear = () => {
-    setAverageConsumption('');
-    setDistanceTraveled('');
-    setInitialFuel('');
-    setRemainingFuel(null); 
+    setFormData(initialState);
+    setRemainingFuel(null);
     setFuelUsed(null);
-  }
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Fuel Kalkulator</Text>
-
-      <InputField 
-        label="Spalanie na 100 (L/100km)" 
-        value={averageConsumption} 
-        onChangeText={setAverageConsumption} 
-      />
-      <InputField 
-        label="Odległość przejechana (km)" 
-        value={distanceTraveled} 
-        onChangeText={setDistanceTraveled} 
-      />
-      <InputField 
-        label="Paliwo początkowe (L)" 
-        value={initialFuel} 
-        onChangeText={setInitialFuel} 
-      />
-
+      {['Spalanie na 100 (L/100km)', 'Odległość przejechana (km)', 'Paliwo początkowe (L)'].map((label, index) => (
+     <TextInput
+      key={index}
+      style={styles.input}
+      placeholder={label}
+      keyboardType="numeric"
+      value={Object.values(formData)[index]}
+      onChangeText={(text: string) => setFormData({ ...formData, [Object.keys(formData)[index]]: text })}
+    />
+  ))}
       <View style={styles.buttonContainer}>
-        <Button title="Oblicz paliwo" onPress={calculateRemainingFuel} />
         <TouchableOpacity style={styles.buttonClear} onPress={clear}>
           <Text>Czyść</Text>
         </TouchableOpacity>
       </View>
-     
       {remainingFuel !== null && (
         <View>
           <Text style={styles.result}>Zostało paliwa: {remainingFuel} litry</Text>
-          <Text style={styles.result}>Spalone paliwo: {fuelUsed} litry</Text> 
+          <Text style={styles.result}>Spalone paliwo: {fuelUsed} litry</Text>
         </View>
       )}
     </View>
   );
 };
-
-const InputField = ({ label, value, onChangeText }: InputFieldProps) => (
-  <>
-    <Text>{label}</Text>
-    <TextInput
-      style={styles.input}
-      placeholder={label}
-      keyboardType="numeric"
-      value={value}
-      onChangeText={onChangeText}
-    />
-  </>
-);
 
 const styles = StyleSheet.create({
   container: {
@@ -116,8 +88,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between', 
     alignItems: 'center',
   },
   buttonClear: {
@@ -143,5 +113,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
-export default FuelCalculator;

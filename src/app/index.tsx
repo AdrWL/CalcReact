@@ -1,6 +1,6 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import FuelCalculator from '../components/FuelCalculator';
+import { FuelCalculator } from '../components/FuelCalculator';
 import { Calc } from '../components/Calc'; 
 
 const Stack = createNativeStackNavigator();
