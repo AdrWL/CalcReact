@@ -45,24 +45,24 @@ export const FuelCalculator = () => {
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
         <Text style={styles.backButtonText}>← Powrót</Text>
       </TouchableOpacity>
-      <Text style={styles.title}>Fuel Kalkulator</Text>
+      <Text style={styles.title}>Kalkulator Paliwa</Text>
       {['Spalanie na 100 (L/100km)', 'Odległość przejechana (km)', 'Paliwo początkowe (L)'].map((label, index) => (
-     <TextInput
-      key={index}
-      style={styles.input}
-      placeholder={label}
-      keyboardType="numeric"
-      value={Object.values(formData)[index]}
-      onChangeText={(text: string) => setFormData({ ...formData, [Object.keys(formData)[index]]: text })}
-    />
-  ))}
+        <TextInput
+          key={index}
+          style={styles.input}
+          placeholder={label}
+          keyboardType="numeric"
+          value={Object.values(formData)[index]}
+          onChangeText={(text: string) => setFormData({ ...formData, [Object.keys(formData)[index]]: text })}
+        />
+      ))}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.buttonClear} onPress={clear}>
-          <Text>Czyść</Text>
+        <TouchableOpacity style={styles.button} onPress={clear}>
+          <Text style={styles.buttonText}>Czyść</Text>
         </TouchableOpacity>
       </View>
       {remainingFuel !== null && (
-        <View>
+        <View style={styles.resultContainer}>
           <Text style={styles.result}>Zostało paliwa: {remainingFuel} litry</Text>
           <Text style={styles.result}>Spalone paliwo: {fuelUsed} litry</Text>
         </View>
@@ -75,10 +75,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#F5F5F5', 
+    alignItems: 'center', 
   },
   backButton: {
-    marginBottom: 10,
+    alignSelf: 'flex-start', 
+    marginBottom: 20,
   },
   backButtonText: {
     color: '#6200EE',
@@ -87,41 +89,49 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
+    marginBottom: 30,
+    color: '#333', 
   },
   input: {
+    width: '90%', 
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 15,
+    borderColor: '#CCC',
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 20,
     fontSize: 16,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFF',
+    elevation: 1,
   },
   buttonContainer: {
+    marginTop: 20,
+  },
+  button: {
+    backgroundColor: '#6200EE',
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  buttonText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  resultContainer: {
+    marginTop: 30,
     alignItems: 'center',
   },
-  buttonClear: {
-    width: "50%",
-    backgroundColor: '#FF5733',
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-  },
   result: {
-    marginTop: 10,
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '500',
+    color: '#333',
     textAlign: 'center',
   },
 });
