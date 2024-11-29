@@ -26,7 +26,7 @@ export const Home = () => {
         style={styles.button}
         onPress={() => navigation.navigate("CarAdd")}
       >
-        <Text style={styles.buttonText}>Wprowadź samochód</Text>
+        <Text style={styles.buttonText}>Wprowadź Samochód</Text>
       </TouchableOpacity>
     </View>
   );
