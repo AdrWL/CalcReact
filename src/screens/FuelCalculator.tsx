@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 interface FormData {
   averageConsumption: string;
@@ -8,6 +9,7 @@ interface FormData {
 }
 
 export const FuelCalculator = () => {
+  const navigation = useNavigation(); 
   const initialState = {
     averageConsumption: '',
     distanceTraveled: '',
@@ -40,6 +42,9 @@ export const FuelCalculator = () => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <Text style={styles.backButtonText}>← Powrót</Text>
+      </TouchableOpacity>
       <Text style={styles.title}>Fuel Kalkulator</Text>
       {['Spalanie na 100 (L/100km)', 'Odległość przejechana (km)', 'Paliwo początkowe (L)'].map((label, index) => (
      <TextInput
@@ -71,6 +76,13 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: '#f5f5f5',
+  },
+  backButton: {
+    marginBottom: 10,
+  },
+  backButtonText: {
+    color: '#6200EE',
+    fontSize: 16,
   },
   title: {
     fontSize: 24,
