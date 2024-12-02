@@ -20,12 +20,21 @@ const carSlice = createSlice({
     addCar: (state, action: PayloadAction<Car>) => {
       state.cars.push(action.payload);
     },
+    editCar: (state, action: PayloadAction<{ index: number; name: string; fuelConsumption: string }>) => {
+      const { index, name, fuelConsumption } = action.payload;
+      if (state.cars[index]) {
+        state.cars[index] = { name, fuelConsumption };
+      }
+    },
+    removeCar: (state, action: PayloadAction<number>) => {
+      state.cars.splice(action.payload, 1);
+    },
   },
 });
 
-export const { addCar } = carSlice.actions;
+export const { addCar, editCar, removeCar } = carSlice.actions;
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
     car: carSlice.reducer,
   },
