@@ -164,15 +164,18 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginTop: 20,
+    marginBottom: 30,
     color: '#FFF',
   },
   modalItem: {
     backgroundColor: '#FFF',
     padding: 15,
+    paddingLeft: 70,
+    paddingRight: 70,
     borderRadius: 10,
     marginBottom: 10,
-    width: '80%',
+    width: '100%',
     alignItems: 'center',
   },
   modalItemText: {
@@ -185,6 +188,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 12,
     marginTop: 20,
+    marginBottom: 30,
   },
   modalCloseText: {
     color: '#FFF',
