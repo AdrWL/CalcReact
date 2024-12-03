@@ -219,10 +219,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
+    boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.3)',
     elevation: 5,
   },
   clearButton: {

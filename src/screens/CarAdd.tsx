@@ -132,10 +132,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
+    boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.3)',
     elevation: 5,
   },
   addButtonText: {
@@ -154,10 +151,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 15,
     marginBottom: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.3)',
     elevation: 2,
   },
   carDetails: {
