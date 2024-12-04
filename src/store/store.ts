@@ -13,6 +13,7 @@ const initialState: CarState = {
   cars: [],
 };
 
+
 const carSlice = createSlice({
   name: 'car',
   initialState,
@@ -34,9 +35,30 @@ const carSlice = createSlice({
 
 export const { addCar, editCar, removeCar } = carSlice.actions;
 
+interface ThemeState {
+  isDarkMode: boolean;
+}
+
+const initialThemeState: ThemeState = {
+  isDarkMode: false, // Domyślnie jasny tryb
+};
+
+const themeSlice = createSlice({
+  name: 'theme',
+  initialState: initialThemeState,
+  reducers: {
+    toggleTheme: (state) => {
+      state.isDarkMode = !state.isDarkMode;
+    },
+  },
+});
+
+export const { toggleTheme } = themeSlice.actions;
+
 export const store = configureStore({
   reducer: {
     car: carSlice.reducer,
+    theme: themeSlice.reducer,
   },
 });
 

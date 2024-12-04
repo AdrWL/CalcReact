@@ -23,7 +23,7 @@ export const FuelCalculator = () => {
     }
   }, [selectedCar]);
 
-  const handleCarSelection = () => {
+   const handleCarSelection = () => {
     if (cars.length === 0) {
       Alert.alert('Brak samochodów w bazie', 'Dodaj samochód przed kontynuowaniem.', [
         { text: 'OK', onPress: () => {} },
