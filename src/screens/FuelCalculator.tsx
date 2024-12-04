@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Modal } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Modal, Alert } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { RootState } from '../store/store';
@@ -22,6 +22,16 @@ export const FuelCalculator = () => {
       if (car) setAverageConsumption(car.fuelConsumption);
     }
   }, [selectedCar]);
+
+  const handleCarSelection = () => {
+    if (cars.length === 0) {
+      Alert.alert('Brak samochodów w bazie', 'Dodaj samochód przed kontynuowaniem.', [
+        { text: 'OK', onPress: () => {} },
+      ]);
+    } else {
+      setModalVisible(true);
+    }
+  };
 
   const calculateFuel = () => {
     const avg = parseFloat(averageConsumption);
@@ -49,11 +59,11 @@ export const FuelCalculator = () => {
 
   return (
     <View style={styles.container}>
-       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
         <Text style={styles.backButtonText}>← Powrót</Text>
       </TouchableOpacity>
       {/* Wybór samochodu */}
-      <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.dropdownButton}>
+      <TouchableOpacity onPress={handleCarSelection} style={styles.dropdownButton}>
         <Text style={styles.dropdownButtonText}>
           {selectedCar ? `Wybrano: ${selectedCar}` : 'Wybierz samochód'}
         </Text>
