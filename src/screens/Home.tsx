@@ -5,6 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleTheme } from '../store/store';
 import { RootStackParamList } from '../navigation/types';
+import { DarkModeButton } from "../../assets/icons/index";
 import { RootState } from '../store/store';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -37,11 +38,11 @@ export const Home = () => {
       fontSize: 18,
       fontWeight: '600',
     },
-    themeToggle: {
-      marginTop: 30,
-      padding: 10,
-      borderRadius: 5,
-      backgroundColor: isDarkMode ? '#555' : '#CCC',
+    themeToggleContainer: {
+      position: 'absolute',
+      top: 10,
+      right: 10, 
+      zIndex: 1, 
     },
     themeToggleText: {
       color: isDarkMode ? '#FFF' : '#000',
@@ -62,11 +63,13 @@ export const Home = () => {
       >
         <Text style={styles.buttonText}>Wprowadź Samochód</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.themeToggle} onPress={() => dispatch(toggleTheme())}>
-        <Text style={styles.themeToggleText}>
-          {isDarkMode ? 'Przełącz na jasny tryb' : 'Przełącz na ciemny tryb'}
-        </Text>
-      </TouchableOpacity>
+      <View style={styles.themeToggleContainer}>
+        <TouchableOpacity onPress={() => dispatch(toggleTheme())}>
+          <Text style={styles.themeToggleText}>
+            {isDarkMode ? <DarkModeButton /> : <DarkModeButton />}
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
