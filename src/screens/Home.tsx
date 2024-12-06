@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 20, 
     alignItems: 'center',
-    boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.3)',
+    boxShadow: '5px 5px 4px rgba(0, 0, 0, 0.3)',
     elevation: 4, 
   },
   buttonText: {
