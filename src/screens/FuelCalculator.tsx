@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Modal, Alert } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import { RootState } from '../store/store';
+import { RootState, toggleTheme } from '../store/store';
+import { DarkModeButton } from "../../assets/icons/index";
 
 export const FuelCalculator = () => {
   const navigation = useNavigation();
   const cars = useSelector((state: RootState) => state.car.cars);
-
+  const dispatch = useDispatch();
+  const isDarkMode = useSelector((state: RootState) => state.theme.isDarkMode);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedCar, setSelectedCar] = useState<string | null>(null);
   const [averageConsumption, setAverageConsumption] = useState<string>('');
@@ -15,6 +17,131 @@ export const FuelCalculator = () => {
   const [initialFuel, setInitialFuel] = useState<string>('');
   const [remainingFuel, setRemainingFuel] = useState<number | null>(null);
   const [fuelUsed, setFuelUsed] = useState<number | null>(null);
+
+  
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: isDarkMode ? '#333' : '#F5F5F5', 
+  },
+  themeToggleContainer: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    zIndex: 1,
+  },
+  themeToggleText: {
+    color: isDarkMode ? '#FFF' : '#000',
+  },
+  backButton: {
+    marginBottom: 30,
+    alignSelf: 'flex-start',
+  },
+  backButtonText: {
+    color: '#6200EE',
+    fontSize: 16,
+  },
+  dropdownButton: {
+    backgroundColor: '#6200EE',
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 25,
+  },
+  dropdownButtonText: {
+    color: '#FFF',
+    fontSize: 16,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 30,
+    color: '#FFF',
+  },
+  modalItem: {
+    backgroundColor: '#FFF',
+    padding: 15,
+    paddingLeft: 70,
+    paddingRight: 70,
+    borderRadius: 10,
+    marginBottom: 10,
+    width: '100%',
+    alignItems: 'center',
+  },
+  modalItemText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  modalCloseButton: {
+    backgroundColor: '#6200EE',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    marginTop: 20,
+    marginBottom: 30,
+  },
+  modalCloseText: {
+    color: '#FFF',
+    fontSize: 16,
+  },
+  input: {
+    width: '90%',
+    borderWidth: 1,
+    borderColor: isDarkMode ? '#666' : '#CCC', 
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 20,
+    fontSize: 16,
+    backgroundColor: isDarkMode ? '#444' : '#FFF', 
+    alignSelf: 'center',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '90%',
+    alignSelf: 'center',
+    marginTop: 20,
+  },
+  button: {
+    backgroundColor: '#6200EE',
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.3)',
+    elevation: 5,
+  },
+  clearButton: {
+    backgroundColor: '#E53935',
+  },
+  buttonText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  resultContainer: {
+    marginTop: 30,
+    alignItems: 'center',
+  },
+  result: {
+    fontSize: 18,
+    fontWeight: '500',
+    color: '#333',
+    textAlign: 'center',
+  },
+});
+
 
   useEffect(() => {
     if (selectedCar) {
@@ -59,6 +186,13 @@ export const FuelCalculator = () => {
 
   return (
     <View style={styles.container}>
+       <View style={styles.themeToggleContainer}>
+        <TouchableOpacity onPress={() => dispatch(toggleTheme())}>
+          <Text style={styles.themeToggleText}>
+            {isDarkMode ? <DarkModeButton /> : <DarkModeButton />}
+          </Text>
+        </TouchableOpacity>
+      </View>
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
         <Text style={styles.backButtonText}>← Powrót</Text>
       </TouchableOpacity>
@@ -137,117 +271,3 @@ export const FuelCalculator = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#F5F5F5',
-  },
-  backButton: {
-    marginBottom: 20,
-    alignSelf: 'flex-start',
-  },
-  backButtonText: {
-    color: '#6200EE',
-    fontSize: 16,
-  },
-  dropdownButton: {
-    backgroundColor: '#6200EE',
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20,
-  },
-  dropdownButtonText: {
-    color: '#FFF',
-    fontSize: 16,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: 20,
-    marginBottom: 30,
-    color: '#FFF',
-  },
-  modalItem: {
-    backgroundColor: '#FFF',
-    padding: 15,
-    paddingLeft: 70,
-    paddingRight: 70,
-    borderRadius: 10,
-    marginBottom: 10,
-    width: '100%',
-    alignItems: 'center',
-  },
-  modalItemText: {
-    fontSize: 16,
-    color: '#333',
-  },
-  modalCloseButton: {
-    backgroundColor: '#6200EE',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 12,
-    marginTop: 20,
-    marginBottom: 30,
-  },
-  modalCloseText: {
-    color: '#FFF',
-    fontSize: 16,
-  },
-  input: {
-    width: '90%',
-    borderWidth: 1,
-    borderColor: '#CCC',
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 20,
-    fontSize: 16,
-    backgroundColor: '#FFF',
-    alignSelf: 'center',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '90%',
-    alignSelf: 'center',
-    marginTop: 20,
-  },
-  button: {
-    backgroundColor: '#6200EE',
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    boxShadow: '0px 3px 4px rgba(0, 0, 0, 0.3)',
-    elevation: 5,
-  },
-  clearButton: {
-    backgroundColor: '#E53935',
-  },
-  buttonText: {
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  resultContainer: {
-    marginTop: 30,
-    alignItems: 'center',
-  },
-  result: {
-    fontSize: 18,
-    fontWeight: '500',
-    color: '#333',
-    textAlign: 'center',
-  },
-});
