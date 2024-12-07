@@ -99,11 +99,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: isDarkMode ? '#666' : '#CCC', 
     borderRadius: 10,
+    color: isDarkMode ? '#FFF' : '#333', 
     padding: 12,
     marginBottom: 20,
     fontSize: 16,
     backgroundColor: isDarkMode ? '#444' : '#FFF', 
     alignSelf: 'center',
+  },
+  placeholderColor: {
+    color: isDarkMode ? '#AAA' : '#888', // Kolor placeholdera
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -137,7 +141,7 @@ const styles = StyleSheet.create({
   result: {
     fontSize: 18,
     fontWeight: '500',
-    color: '#333',
+    color: isDarkMode ? '#FFF' : '#333', 
     textAlign: 'center',
   },
 });
@@ -232,6 +236,7 @@ const styles = StyleSheet.create({
       <TextInput
         style={styles.input}
         placeholder="Spalanie na 100 km (L/100km)"
+        placeholderTextColor={isDarkMode ? '#AAA' : '#888'} 
         keyboardType="numeric"
         value={averageConsumption}
         onChangeText={setAverageConsumption}
@@ -239,6 +244,7 @@ const styles = StyleSheet.create({
       <TextInput
         style={styles.input}
         placeholder="Odległość przejechana (km)"
+        placeholderTextColor={isDarkMode ? '#AAA' : '#888'} 
         keyboardType="numeric"
         value={distanceTraveled}
         onChangeText={setDistanceTraveled}
@@ -246,6 +252,7 @@ const styles = StyleSheet.create({
       <TextInput
         style={styles.input}
         placeholder="Paliwo początkowe (L)"
+        placeholderTextColor={isDarkMode ? '#AAA' : '#888'} 
         keyboardType="numeric"
         value={initialFuel}
         onChangeText={setInitialFuel}

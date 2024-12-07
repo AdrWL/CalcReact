@@ -92,6 +92,9 @@ export const CarAdd = () => {
       fontWeight: 'bold',
       color: isDarkMode ? '#FFF' : '#333', // Zmiana koloru nazwy samochodu
     },
+    placeholderColor: {
+      color: isDarkMode ? '#AAA' : '#888', // Kolor placeholdera
+    },
     carFuel: {
       fontSize: 14,
       color: isDarkMode ? '#CCC' : '#666', // Zmiana koloru spalania
@@ -168,12 +171,14 @@ export const CarAdd = () => {
       <TextInput
         style={styles.input}
         placeholder="Nazwa samochodu"
+        placeholderTextColor={isDarkMode ? '#AAA' : '#888'} 
         value={carName}
         onChangeText={setCarName}
       />
       <TextInput
         style={styles.input}
         placeholder="Spalanie (L/100km)"
+        placeholderTextColor={isDarkMode ? '#AAA' : '#888'} 
         keyboardType="numeric"
         value={fuel}
         onChangeText={setFuel}
