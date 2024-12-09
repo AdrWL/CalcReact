@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Modal, Alert } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import { RootState } from '../store/store';
+import { RootState, toggleTheme } from '../store/store';
+import { DarkModeButton } from "../../assets/icons/index";
 
 export const FuelCalculator = () => {
   const navigation = useNavigation();
   const cars = useSelector((state: RootState) => state.car.cars);
-
+  const dispatch = useDispatch();
+  const isDarkMode = useSelector((state: RootState) => state.theme.isDarkMode);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedCar, setSelectedCar] = useState<string | null>(null);
   const [averageConsumption, setAverageConsumption] = useState<string>('');
@@ -16,136 +18,24 @@ export const FuelCalculator = () => {
   const [remainingFuel, setRemainingFuel] = useState<number | null>(null);
   const [fuelUsed, setFuelUsed] = useState<number | null>(null);
 
-  useEffect(() => {
-    if (selectedCar) {
-      const car = cars.find((c) => c.name === selectedCar);
-      if (car) setAverageConsumption(car.fuelConsumption);
-    }
-  }, [selectedCar]);
-
-  const handleCarSelection = () => {
-    if (cars.length === 0) {
-      Alert.alert('Brak samochodów w bazie', 'Dodaj samochód przed kontynuowaniem.', [
-        { text: 'OK', onPress: () => {} },
-      ]);
-    } else {
-      setModalVisible(true);
-    }
-  };
-
-  const calculateFuel = () => {
-    const avg = parseFloat(averageConsumption);
-    const distance = parseFloat(distanceTraveled);
-    const initial = parseFloat(initialFuel);
-
-    if (!isNaN(avg) && !isNaN(distance) && !isNaN(initial)) {
-      const used = (avg * distance) / 100;
-      setFuelUsed(parseFloat(used.toFixed(2)));
-      setRemainingFuel(parseFloat((initial - used).toFixed(2)));
-    } else {
-      setFuelUsed(null);
-      setRemainingFuel(null);
-    }
-  };
-
-  const clear = () => {
-    setSelectedCar(null);
-    setAverageConsumption('');
-    setDistanceTraveled('');
-    setInitialFuel('');
-    setFuelUsed(null);
-    setRemainingFuel(null);
-  };
-
-  return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-        <Text style={styles.backButtonText}>← Powrót</Text>
-      </TouchableOpacity>
-      {/* Wybór samochodu */}
-      <TouchableOpacity onPress={handleCarSelection} style={styles.dropdownButton}>
-        <Text style={styles.dropdownButtonText}>
-          {selectedCar ? `Wybrano: ${selectedCar}` : 'Wybierz samochód'}
-        </Text>
-      </TouchableOpacity>
-
-      {/* Modal z listą samochodów */}
-      <Modal visible={modalVisible} animationType="slide" transparent={true}>
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Wybierz samochód:</Text>
-          <FlatList
-            data={cars}
-            keyExtractor={(item) => item.name}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.modalItem}
-                onPress={() => {
-                  setSelectedCar(item.name);
-                  setModalVisible(false);
-                }}
-              >
-                <Text style={styles.modalItemText}>{item.name}</Text>
-              </TouchableOpacity>
-            )}
-          />
-          <TouchableOpacity style={styles.modalCloseButton} onPress={() => setModalVisible(false)}>
-            <Text style={styles.modalCloseText}>Zamknij</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
-
-      {/* Pola do wprowadzenia danych */}
-      <TextInput
-        style={styles.input}
-        placeholder="Spalanie na 100 km (L/100km)"
-        keyboardType="numeric"
-        value={averageConsumption}
-        onChangeText={setAverageConsumption}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Odległość przejechana (km)"
-        keyboardType="numeric"
-        value={distanceTraveled}
-        onChangeText={setDistanceTraveled}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Paliwo początkowe (L)"
-        keyboardType="numeric"
-        value={initialFuel}
-        onChangeText={setInitialFuel}
-      />
-
-      {/* Przyciski */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={calculateFuel}>
-          <Text style={styles.buttonText}>Oblicz</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, styles.clearButton]} onPress={clear}>
-          <Text style={styles.buttonText}>Czyść</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Wyniki */}
-      {fuelUsed !== null && remainingFuel !== null && (
-        <View style={styles.resultContainer}>
-          <Text style={styles.result}>Spalone paliwo: {fuelUsed} litry</Text>
-          <Text style={styles.result}>Zostało paliwa: {remainingFuel} litry</Text>
-        </View>
-      )}
-    </View>
-  );
-};
-
+  
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: isDarkMode ? '#333' : '#F5F5F5', 
+  },
+  themeToggleContainer: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    zIndex: 1,
+  },
+  themeToggleText: {
+    color: isDarkMode ? '#FFF' : '#000',
   },
   backButton: {
-    marginBottom: 20,
+    marginBottom: 30,
     alignSelf: 'flex-start',
   },
   backButtonText: {
@@ -159,7 +49,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 20,
+    marginBottom: 25,
   },
   dropdownButtonText: {
     color: '#FFF',
@@ -207,13 +97,17 @@ const styles = StyleSheet.create({
   input: {
     width: '90%',
     borderWidth: 1,
-    borderColor: '#CCC',
+    borderColor: isDarkMode ? '#666' : '#CCC', 
     borderRadius: 10,
+    color: isDarkMode ? '#FFF' : '#333', 
     padding: 12,
     marginBottom: 20,
     fontSize: 16,
-    backgroundColor: '#FFF',
+    backgroundColor: isDarkMode ? '#444' : '#FFF', 
     alignSelf: 'center',
+  },
+  placeholderColor: {
+    color: isDarkMode ? '#AAA' : '#888', // Kolor placeholdera
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -247,7 +141,140 @@ const styles = StyleSheet.create({
   result: {
     fontSize: 18,
     fontWeight: '500',
-    color: '#333',
+    color: isDarkMode ? '#FFF' : '#333', 
     textAlign: 'center',
   },
 });
+
+
+  useEffect(() => {
+    if (selectedCar) {
+      const car = cars.find((c) => c.name === selectedCar);
+      if (car) setAverageConsumption(car.fuelConsumption);
+    }
+  }, [selectedCar]);
+
+   const handleCarSelection = () => {
+    if (cars.length === 0) {
+      Alert.alert('Brak samochodów w bazie', 'Dodaj samochód przed kontynuowaniem.', [
+        { text: 'OK', onPress: () => {} },
+      ]);
+    } else {
+      setModalVisible(true);
+    }
+  };
+
+  const calculateFuel = () => {
+    const avg = parseFloat(averageConsumption);
+    const distance = parseFloat(distanceTraveled);
+    const initial = parseFloat(initialFuel);
+
+    if (!isNaN(avg) && !isNaN(distance) && !isNaN(initial)) {
+      const used = (avg * distance) / 100;
+      setFuelUsed(parseFloat(used.toFixed(2)));
+      setRemainingFuel(parseFloat((initial - used).toFixed(2)));
+    } else {
+      setFuelUsed(null);
+      setRemainingFuel(null);
+    }
+  };
+
+  const clear = () => {
+    setSelectedCar(null);
+    setAverageConsumption('');
+    setDistanceTraveled('');
+    setInitialFuel('');
+    setFuelUsed(null);
+    setRemainingFuel(null);
+  };
+
+  return (
+    <View style={styles.container}>
+       <View style={styles.themeToggleContainer}>
+        <TouchableOpacity onPress={() => dispatch(toggleTheme())}>
+          <Text style={styles.themeToggleText}>
+            {isDarkMode ? <DarkModeButton /> : <DarkModeButton />}
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <Text style={styles.backButtonText}>← Powrót</Text>
+      </TouchableOpacity>
+      {/* Wybór samochodu */}
+      <TouchableOpacity onPress={handleCarSelection} style={styles.dropdownButton}>
+        <Text style={styles.dropdownButtonText}>
+          {selectedCar ? `Wybrano: ${selectedCar}` : 'Wybierz samochód'}
+        </Text>
+      </TouchableOpacity>
+
+      {/* Modal z listą samochodów */}
+      <Modal visible={modalVisible} animationType="slide" transparent={true}>
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalTitle}>Wybierz samochód:</Text>
+          <FlatList
+            data={cars}
+            keyExtractor={(item) => item.name}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={styles.modalItem}
+                onPress={() => {
+                  setSelectedCar(item.name);
+                  setModalVisible(false);
+                }}
+              >
+                <Text style={styles.modalItemText}>{item.name}</Text>
+              </TouchableOpacity>
+            )}
+          />
+          <TouchableOpacity style={styles.modalCloseButton} onPress={() => setModalVisible(false)}>
+            <Text style={styles.modalCloseText}>Zamknij</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+
+      {/* Pola do wprowadzenia danych */}
+      <TextInput
+        style={styles.input}
+        placeholder="Spalanie na 100 km (L/100km)"
+        placeholderTextColor={isDarkMode ? '#AAA' : '#888'} 
+        keyboardType="numeric"
+        value={averageConsumption}
+        onChangeText={setAverageConsumption}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Odległość przejechana (km)"
+        placeholderTextColor={isDarkMode ? '#AAA' : '#888'} 
+        keyboardType="numeric"
+        value={distanceTraveled}
+        onChangeText={setDistanceTraveled}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Paliwo początkowe (L)"
+        placeholderTextColor={isDarkMode ? '#AAA' : '#888'} 
+        keyboardType="numeric"
+        value={initialFuel}
+        onChangeText={setInitialFuel}
+      />
+
+      {/* Przyciski */}
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={calculateFuel}>
+          <Text style={styles.buttonText}>Oblicz</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.button, styles.clearButton]} onPress={clear}>
+          <Text style={styles.buttonText}>Czyść</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Wyniki */}
+      {fuelUsed !== null && remainingFuel !== null && (
+        <View style={styles.resultContainer}>
+          <Text style={styles.result}>Spalone paliwo: {fuelUsed} litry</Text>
+          <Text style={styles.result}>Zostało paliwa: {remainingFuel} litry</Text>
+        </View>
+      )}
+    </View>
+  );
+};
