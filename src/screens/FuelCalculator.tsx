@@ -3,6 +3,7 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Modal, A
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { RootState, toggleTheme } from '../store/store';
+import { LinearGradient } from 'expo-linear-gradient';
 import { DarkModeButton } from "../../assets/icons/index";
 
 export const FuelCalculator = () => {
@@ -189,6 +190,10 @@ const styles = StyleSheet.create({
   };
 
   return (
+    <LinearGradient
+        colors={isDarkMode ? ['#1E1E2F', '#3A3A55'] : ['#E3F2FD', '#90CAF9']}
+        style={{ flex: 1 }}
+      >
     <View style={styles.container}>
        <View style={styles.themeToggleContainer}>
         <TouchableOpacity onPress={() => dispatch(toggleTheme())}>
@@ -269,5 +274,6 @@ const styles = StyleSheet.create({
         </View>
       )}
     </View>
+    </LinearGradient>
   );
 };

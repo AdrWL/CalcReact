@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { addCar, editCar, removeCar, toggleTheme } from '../store/store';
 import { RootState } from '../store/store';
+import { LinearGradient } from 'expo-linear-gradient';
 import { DarkModeButton } from "../../assets/icons/index";
 
 export const CarAdd = () => {
@@ -19,7 +20,6 @@ export const CarAdd = () => {
     container: {
       flex: 1,
       padding: 20,
-      backgroundColor: isDarkMode ? '#333' : '#F5F5F5', 
     },
     themeToggleContainer: {
       position: 'absolute',
@@ -42,7 +42,7 @@ export const CarAdd = () => {
       fontSize: 24,
       fontWeight: 'bold',
       marginBottom: 30,
-      color: isDarkMode ? '#FFF' : '#333', 
+      color: isDarkMode ? '#FFF' : '#333',
     },
     input: {
       width: '90%',
@@ -52,9 +52,9 @@ export const CarAdd = () => {
       padding: 12,
       marginBottom: 20,
       fontSize: 16,
-      backgroundColor: isDarkMode ? '#444' : '#FFF', 
+      backgroundColor: isDarkMode ? '#444' : '#FFF',
       alignSelf: 'center',
-      color: isDarkMode ? '#FFF' : '#000', 
+      color: isDarkMode ? '#FFF' : '#000',
     },
     addButton: {
       backgroundColor: '#6200EE',
@@ -78,7 +78,7 @@ export const CarAdd = () => {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      backgroundColor: isDarkMode ? '#444' : '#FFF', 
+      backgroundColor: isDarkMode ? '#444' : '#FFF',
       borderRadius: 10,
       padding: 15,
       marginBottom: 10,
@@ -90,14 +90,11 @@ export const CarAdd = () => {
     carName: {
       fontSize: 16,
       fontWeight: 'bold',
-      color: isDarkMode ? '#FFF' : '#333', 
-    },
-    placeholderColor: {
-      color: isDarkMode ? '#AAA' : '#888', 
+      color: isDarkMode ? '#FFF' : '#333',
     },
     carFuel: {
       fontSize: 14,
-      color: isDarkMode ? '#CCC' : '#666', 
+      color: isDarkMode ? '#CCC' : '#666',
       marginTop: 4,
     },
     actions: {
@@ -156,57 +153,60 @@ export const CarAdd = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.themeToggleContainer}>
-        <TouchableOpacity onPress={() => dispatch(toggleTheme())}>
-          <Text style={styles.themeToggleText}>
-            {isDarkMode ? <DarkModeButton /> : <DarkModeButton />}
-          </Text>
+    <LinearGradient
+      colors={isDarkMode ? ['#1E1E2F', '#3A3A55'] : ['#E3F2FD', '#90CAF9']}
+      style={{ flex: 1 }}
+    >
+      <View style={styles.container}>
+        <View style={styles.themeToggleContainer}>
+          <TouchableOpacity onPress={() => dispatch(toggleTheme())}>
+            <DarkModeButton />
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Text style={styles.backButtonText}>← Powrót</Text>
         </TouchableOpacity>
+        <Text style={styles.title}>{editingIndex !== null ? 'Edytuj Samochód' : 'Dodaj Samochód'}</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Nazwa samochodu"
+          placeholderTextColor={isDarkMode ? '#AAA' : '#888'}
+          value={carName}
+          onChangeText={setCarName}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Spalanie (L/100km)"
+          placeholderTextColor={isDarkMode ? '#AAA' : '#888'}
+          keyboardType="numeric"
+          value={fuel}
+          onChangeText={setFuel}
+        />
+        <TouchableOpacity onPress={handleAddCar} style={styles.addButton}>
+          <Text style={styles.addButtonText}>{editingIndex !== null ? 'Zapisz zmiany' : 'Dodaj samochód'}</Text>
+        </TouchableOpacity>
+        <FlatList
+          data={cars}
+          keyExtractor={(item, index) => `${item.name}-${index}`}
+          style={styles.list}
+          renderItem={({ item, index }) => (
+            <View style={styles.listItem}>
+              <View style={styles.carDetails}>
+                <Text style={styles.carName}>{item.name}</Text>
+                <Text style={styles.carFuel}>Spalanie: {item.fuelConsumption} L/100km</Text>
+              </View>
+              <View style={styles.actions}>
+                <TouchableOpacity onPress={() => handleEdit(index)} style={styles.editButton}>
+                  <Text style={styles.actionText}>Edytuj</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => handleDelete(index)} style={styles.deleteButton}>
+                  <Text style={styles.actionText}>Usuń</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+        />
       </View>
-      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-        <Text style={styles.backButtonText}>← Powrót</Text>
-      </TouchableOpacity>
-      <Text style={styles.title}>{editingIndex !== null ? 'Edytuj Samochód' : 'Dodaj Samochód'}</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Nazwa samochodu"
-        placeholderTextColor={isDarkMode ? '#AAA' : '#888'} 
-        value={carName}
-        onChangeText={setCarName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Spalanie (L/100km)"
-        placeholderTextColor={isDarkMode ? '#AAA' : '#888'} 
-        keyboardType="numeric"
-        value={fuel}
-        onChangeText={setFuel}
-      />
-      <TouchableOpacity onPress={handleAddCar} style={styles.addButton}>
-        <Text style={styles.addButtonText}>{editingIndex !== null ? 'Zapisz zmiany' : 'Dodaj samochód'}</Text>
-      </TouchableOpacity>
-      <FlatList
-        data={cars}
-        keyExtractor={(item, index) => `${item.name}-${index}`}
-        style={styles.list}
-        renderItem={({ item, index }) => (
-          <View style={styles.listItem}>
-            <View style={styles.carDetails}>
-              <Text style={styles.carName}>{item.name}</Text>
-              <Text style={styles.carFuel}>Spalanie: {item.fuelConsumption} L/100km</Text>
-            </View>
-            <View style={styles.actions}>
-              <TouchableOpacity onPress={() => handleEdit(index)} style={styles.editButton}>
-                <Text style={styles.actionText}>Edytuj</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleDelete(index)} style={styles.deleteButton}>
-                <Text style={styles.actionText}>Usuń</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        )}
-      />
-    </View>
+    </LinearGradient>
   );
 };
