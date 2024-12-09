@@ -40,7 +40,7 @@ interface ThemeState {
 }
 
 const initialThemeState: ThemeState = {
-  isDarkMode: false, // Domyślnie jasny tryb
+  isDarkMode: false, 
 };
 
 const themeSlice = createSlice({

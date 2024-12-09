@@ -52,9 +52,9 @@ export const CarAdd = () => {
       padding: 12,
       marginBottom: 20,
       fontSize: 16,
-      backgroundColor: isDarkMode ? '#444' : '#FFF', // Zmiana koloru tła inputu
+      backgroundColor: isDarkMode ? '#444' : '#FFF', 
       alignSelf: 'center',
-      color: isDarkMode ? '#FFF' : '#000', // Zmiana koloru tekstu w inputach
+      color: isDarkMode ? '#FFF' : '#000', 
     },
     addButton: {
       backgroundColor: '#6200EE',
@@ -78,7 +78,7 @@ export const CarAdd = () => {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      backgroundColor: isDarkMode ? '#444' : '#FFF', // Zmiana koloru tła elementu listy
+      backgroundColor: isDarkMode ? '#444' : '#FFF', 
       borderRadius: 10,
       padding: 15,
       marginBottom: 10,
@@ -90,14 +90,14 @@ export const CarAdd = () => {
     carName: {
       fontSize: 16,
       fontWeight: 'bold',
-      color: isDarkMode ? '#FFF' : '#333', // Zmiana koloru nazwy samochodu
+      color: isDarkMode ? '#FFF' : '#333', 
     },
     placeholderColor: {
-      color: isDarkMode ? '#AAA' : '#888', // Kolor placeholdera
+      color: isDarkMode ? '#AAA' : '#888', 
     },
     carFuel: {
       fontSize: 14,
-      color: isDarkMode ? '#CCC' : '#666', // Zmiana koloru spalania
+      color: isDarkMode ? '#CCC' : '#666', 
       marginTop: 4,
     },
     actions: {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,6 +16,12 @@ export const Home = () => {
   const isDarkMode = useSelector((state: RootState) => state.theme.isDarkMode);
 
   const styles = StyleSheet.create({
+    statusBarDark: {
+      backgroundColor: '#333',
+    },
+    statusBarLight: {
+      backgroundColor: '#F5F5F5',
+    },
     container: {
       flex: 1,
       justifyContent: 'center',
@@ -50,6 +56,11 @@ export const Home = () => {
   });
 
   return (
+    <>
+    <StatusBar 
+      backgroundColor={isDarkMode ? styles.statusBarDark.backgroundColor : styles.statusBarLight.backgroundColor} 
+      barStyle={isDarkMode ? 'light-content' : 'dark-content'} 
+    />
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.button}
@@ -71,5 +82,6 @@ export const Home = () => {
         </TouchableOpacity>
       </View>
     </View>
+    </>
   );
 };

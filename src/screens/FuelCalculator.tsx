@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   placeholderColor: {
-    color: isDarkMode ? '#AAA' : '#888', // Kolor placeholdera
+    color: isDarkMode ? '#AAA' : '#888',
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -200,14 +200,11 @@ const styles = StyleSheet.create({
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
         <Text style={styles.backButtonText}>← Powrót</Text>
       </TouchableOpacity>
-      {/* Wybór samochodu */}
       <TouchableOpacity onPress={handleCarSelection} style={styles.dropdownButton}>
         <Text style={styles.dropdownButtonText}>
           {selectedCar ? `Wybrano: ${selectedCar}` : 'Wybierz samochód'}
         </Text>
       </TouchableOpacity>
-
-      {/* Modal z listą samochodów */}
       <Modal visible={modalVisible} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>Wybierz samochód:</Text>
@@ -231,8 +228,6 @@ const styles = StyleSheet.create({
           </TouchableOpacity>
         </View>
       </Modal>
-
-      {/* Pola do wprowadzenia danych */}
       <TextInput
         style={styles.input}
         placeholder="Spalanie na 100 km (L/100km)"
@@ -258,7 +253,6 @@ const styles = StyleSheet.create({
         onChangeText={setInitialFuel}
       />
 
-      {/* Przyciski */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={calculateFuel}>
           <Text style={styles.buttonText}>Oblicz</Text>
@@ -268,7 +262,6 @@ const styles = StyleSheet.create({
         </TouchableOpacity>
       </View>
 
-      {/* Wyniki */}
       {fuelUsed !== null && remainingFuel !== null && (
         <View style={styles.resultContainer}>
           <Text style={styles.result}>Spalone paliwo: {fuelUsed} litry</Text>
