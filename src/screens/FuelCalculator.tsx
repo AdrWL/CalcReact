@@ -60,20 +60,21 @@ export const FuelCalculator = () => {
     modalTitle: {
       fontSize: 20,
       fontWeight: 'bold',
-      marginTop: 20,
-      marginBottom: 30,
+      marginTop: 40,
+      marginBottom: 40,
       color: '#FFF',
     },
     modalItem: {
       backgroundColor: '#FFF',
       padding: 15,
+      paddingHorizontal: 70,
       borderRadius: 10,
-      marginBottom: 10,
-      width: '90%',
+      marginBottom: 20,
+      width: '100%',
       alignItems: 'center',
     },
     modalItemText: {
-      fontSize: 16,
+      fontSize: 18,
       color: '#333',
     },
     modalCloseButton: {

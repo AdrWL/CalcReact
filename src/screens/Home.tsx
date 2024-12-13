@@ -37,6 +37,7 @@ export const Home = () => {
       fontSize: 16,
       color: isDarkMode ? '#BBBBBB' : '#555555',
       marginTop: 10,
+      textAlign: 'center',
     },
     button: {
       width: '90%',
@@ -119,7 +120,7 @@ export const Home = () => {
         <View style={styles.headerContainer}>
           <Text style={styles.headerText}>CarFuel - OWner</Text>
           <Text style={styles.subHeaderText}>
-            Twoje miejsce do zarządzania samochodami
+            Aplikacja do obliczania spalania paliwa w samochodach
           </Text>
         </View>
 
