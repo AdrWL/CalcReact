@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,6 +7,7 @@ import { toggleTheme } from '../store/store';
 import { RootStackParamList } from '../navigation/types';
 import { DarkModeButton } from '../../assets/icons/index'; 
 import { RootState } from '../store/store';
+import { StatusBars } from './StatusBar';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
@@ -106,10 +107,7 @@ export const Home = () => {
 
   return (
     <>
-      <StatusBar
-        backgroundColor={isDarkMode ? '#1E1E2F' : '#E3F2FD'}
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-      />
+      <StatusBars isDarkMode={isDarkMode} />
       <View style={styles.container}>
         <View style={styles.gradientBackground}>
           <View style={styles.radialGradient}></View>

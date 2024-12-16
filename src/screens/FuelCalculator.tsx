@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Modal, Alert, StatusBar } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Modal, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { RootState, toggleTheme } from '../store/store';
@@ -178,10 +178,6 @@ export const FuelCalculator = () => {
 
   return (
     <>
-      <StatusBar
-        backgroundColor={isDarkMode ? '#1E1E2F' : '#E3F2FD'}
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-      />
       <LinearGradient
         colors={isDarkMode ? ['#1E1E2F', '#3A3A55'] : ['#E3F2FD', '#90CAF9']}
         style={{ flex: 1 }}
