@@ -8,7 +8,7 @@ import { RootStackParamList } from '../navigation/types';
 import { DarkModeButton } from '../../assets/icons/index'; 
 import { RootState } from '../store/store';
 import { StatusBars } from './StatusBar';
-import createStyles from '../styles/HomeStyles'; 
+import { createStyles } from '../styles/HomeStyles'; 
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
