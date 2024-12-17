@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Modal, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, FlatList, Modal, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { RootState, toggleTheme } from '../store/store';
@@ -12,21 +12,25 @@ export const FuelCalculator = () => {
   const cars = useSelector((state: RootState) => state.car.cars);
   const dispatch = useDispatch();
   const isDarkMode = useSelector((state: RootState) => state.theme.isDarkMode);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedCar, setSelectedCar] = useState<string | null>(null);
-  const [averageConsumption, setAverageConsumption] = useState<string>('');
-  const [distanceTraveled, setDistanceTraveled] = useState<string>('');
-  const [initialFuel, setInitialFuel] = useState<string>('');
-  const [remainingFuel, setRemainingFuel] = useState<number | null>(null);
-  const [fuelUsed, setFuelUsed] = useState<number | null>(null);
+  
+  const [formState, setFormState] = useState({
+    modalVisible: false,
+    selectedCar: null as string | null,
+    averageConsumption: '',
+    distanceTraveled: '',
+    initialFuel: '',
+    remainingFuel: null as number | null,
+    fuelUsed: null as number | null,
+  });
+
   const styles = createStyles(isDarkMode);
 
   useEffect(() => {
-    if (selectedCar) {
-      const car = cars.find((c) => c.name === selectedCar);
-      if (car) setAverageConsumption(car.fuelConsumption);
+    if (formState.selectedCar) {
+      const car = cars.find((c) => c.name === formState.selectedCar);
+      if (car) setFormState(prev => ({ ...prev, averageConsumption: car.fuelConsumption }));
     }
-  }, [selectedCar]);
+  }, [formState.selectedCar]);
 
   const handleCarSelection = () => {
     if (cars.length === 0) {
@@ -34,32 +38,41 @@ export const FuelCalculator = () => {
         { text: 'OK', onPress: () => {} },
       ]);
     } else {
-      setModalVisible(true);
+      setFormState(prev => ({ ...prev, modalVisible: true }));
     }
   };
 
   const calculateFuel = () => {
-    const avg = parseFloat(averageConsumption);
-    const distance = parseFloat(distanceTraveled);
-    const initial = parseFloat(initialFuel);
+    const avg = parseFloat(formState.averageConsumption);
+    const distance = parseFloat(formState.distanceTraveled);
+    const initial = parseFloat(formState.initialFuel);
 
     if (!isNaN(avg) && !isNaN(distance) && !isNaN(initial)) {
       const used = (avg * distance) / 100;
-      setFuelUsed(parseFloat(used.toFixed(2)));
-      setRemainingFuel(parseFloat((initial - used).toFixed(2)));
+      setFormState(prev => ({
+        ...prev,
+        fuelUsed: parseFloat(used.toFixed(2)),
+        remainingFuel: parseFloat((initial - used).toFixed(2)),
+      }));
     } else {
-      setFuelUsed(null);
-      setRemainingFuel(null);
+      setFormState(prev => ({
+        ...prev,
+        fuelUsed: null,
+        remainingFuel: null,
+      }));
     }
   };
 
   const clear = () => {
-    setSelectedCar(null);
-    setAverageConsumption('');
-    setDistanceTraveled('');
-    setInitialFuel('');
-    setFuelUsed(null);
-    setRemainingFuel(null);
+    setFormState({
+      modalVisible: false,
+      selectedCar: null,
+      averageConsumption: '',
+      distanceTraveled: '',
+      initialFuel: '',
+      remainingFuel: null,
+      fuelUsed: null,
+    });
   };
 
   return (
@@ -79,10 +92,10 @@ export const FuelCalculator = () => {
           </TouchableOpacity>
           <TouchableOpacity onPress={handleCarSelection} style={styles.dropdownButton}>
             <Text style={styles.dropdownButtonText}>
-              {selectedCar ? `Wybrano: ${selectedCar}` : 'Wybierz samochód'}
+              {formState.selectedCar ? `Wybrano: ${formState.selectedCar}` : 'Wybierz samochód'}
             </Text>
           </TouchableOpacity>
-          <Modal visible={modalVisible} animationType="slide" transparent={true}>
+          <Modal visible={formState.modalVisible} animationType="slide" transparent={true}>
             <View style={styles.modalContainer}>
               <Text style={styles.modalTitle}>Wybierz samochód:</Text>
               <FlatList
@@ -90,61 +103,60 @@ export const FuelCalculator = () => {
                 keyExtractor={(item) => item.name}
                 renderItem={({ item }) => (
                   <TouchableOpacity
-                    style={styles.modalItem}
-                    onPress={() => {
-                      setSelectedCar(item.name);
-                      setModalVisible(false);
-                    }}
-                  >
-                    <Text style={styles.modalItemText}>{item.name}</Text>
-                  </TouchableOpacity>
-                )}
-              />
-              <TouchableOpacity style={styles.modalCloseButton} onPress={() => setModalVisible(false)}>
-                <Text style={styles.modalCloseText}>Zamknij</Text>
+                      style={styles.modalItem}
+                      onPress={() => {
+                        setFormState(prev => ({ ...prev, selectedCar: item.name, modalVisible: false }));
+                      }}
+                    >
+                      <Text style={styles.modalItemText}>{item.name}</Text>
+                    </TouchableOpacity>
+                  )}
+                />
+                <TouchableOpacity style={styles.modalCloseButton} onPress={() => setFormState(prev => ({ ...prev, modalVisible: false }))}>
+                  <Text style={styles.modalCloseText}>Zamknij</Text>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+            <TextInput
+              style={styles.input}
+              placeholder="Spalanie na 100 km (L/100km)"
+              placeholderTextColor={isDarkMode ? '#AAA' : '#888'}
+              keyboardType="numeric"
+              value={formState.averageConsumption}
+              onChangeText={value => setFormState(prev => ({ ...prev, averageConsumption: value }))}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Odległość przejechana (km)"
+              placeholderTextColor={isDarkMode ? '#AAA' : '#888'}
+              keyboardType="numeric"
+              value={formState.distanceTraveled}
+              onChangeText={value => setFormState(prev => ({ ...prev, distanceTraveled: value }))}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Paliwo początkowe (L)"
+              placeholderTextColor={isDarkMode ? '#AAA' : '#888'}
+              keyboardType="numeric"
+              value={formState.initialFuel}
+              onChangeText={value => setFormState(prev => ({ ...prev, initialFuel: value }))}
+            />
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.button} onPress={calculateFuel}>
+                <Text style={styles.buttonText}>Oblicz</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.button, styles.clearButton]} onPress={clear}>
+                <Text style={styles.buttonText}>Czyść</Text>
               </TouchableOpacity>
             </View>
-          </Modal>
-          <TextInput
-            style={styles.input}
-            placeholder="Spalanie na 100 km (L/100km)"
-            placeholderTextColor={isDarkMode ? '#AAA' : '#888'}
-            keyboardType="numeric"
-            value={averageConsumption}
-            onChangeText={setAverageConsumption}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Odległość przejechana (km)"
-            placeholderTextColor={isDarkMode ? '#AAA' : '#888'}
-            keyboardType="numeric"
-            value={distanceTraveled}
-            onChangeText={setDistanceTraveled}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Paliwo początkowe (L)"
-            placeholderTextColor={isDarkMode ? '#AAA' : '#888'}
-            keyboardType="numeric"
-            value={initialFuel}
-            onChangeText={setInitialFuel}
-          />
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={calculateFuel}>
-              <Text style={styles.buttonText}>Oblicz</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, styles.clearButton]} onPress={clear}>
-              <Text style={styles.buttonText}>Czyść</Text>
-            </TouchableOpacity>
+            {formState.fuelUsed !== null && formState.remainingFuel !== null && (
+              <View style={styles.resultContainer}>
+                <Text style={styles.result}>Paliwo zużyte: {formState.fuelUsed} L</Text>
+                <Text style={styles.result}>Pozostałe paliwo: {formState.remainingFuel} L</Text>
+              </View>
+            )}
           </View>
-          {fuelUsed !== null && remainingFuel !== null && (
-            <View style={styles.resultContainer}>
-              <Text style={styles.result}>Paliwo zużyte: {fuelUsed} L</Text>
-              <Text style={styles.result}>Pozostałe paliwo: {remainingFuel} L</Text>
-            </View>
-          )}
-        </View>
-      </LinearGradient>
-    </>
-  );
-};
+        </LinearGradient>
+      </>
+    );
+  };
