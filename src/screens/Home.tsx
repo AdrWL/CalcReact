@@ -5,7 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleTheme } from '../store/store';
 import { RootStackParamList } from '../navigation/types';
-import { DarkModeButton } from '../../assets/icons/index'; 
+import { DarkModeButton, CarIcon } from '../../assets/icons/index'; 
 import { RootState } from '../store/store';
 import { StatusBars } from './StatusBar';
 import { createStyles } from '../styles/HomeStyles'; 
@@ -44,7 +44,7 @@ export const Home = () => {
           style={styles.button}
           onPress={() => navigation.navigate('CarAdd')}
         >
-          <Text style={styles.buttonText}>Dodaj Samochód</Text>
+          <Text style={styles.buttonText}>Dodaj Samochód<CarIcon/></Text>
         </TouchableOpacity>
 
         <TouchableOpacity
