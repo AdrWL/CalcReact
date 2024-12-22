@@ -89,5 +89,13 @@ export const createStyles = (isDarkMode: boolean) => {
       top: 40,
       right: 20,
     },
+    buttonContent: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    buttonIcon: {
+      marginLeft: 10, 
+    },    
   });
 };

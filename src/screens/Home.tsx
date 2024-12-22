@@ -41,12 +41,16 @@ export const Home = () => {
           <Text style={styles.buttonText}>Kalkulator Paliwa</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate('CarAdd')}
+        style={styles.button}
+        onPress={() => navigation.navigate('CarAdd')}
         >
-          <Text style={styles.buttonText}>Dodaj Samochód<CarIcon/></Text>
-        </TouchableOpacity>
-
+        <View style={styles.buttonContent}>
+          <Text style={styles.buttonText}>Dodaj Samochód</Text>
+          <View style={styles.buttonIcon} >
+            <CarIcon/>
+          </View>
+          </View>
+      </TouchableOpacity>
         <TouchableOpacity
           style={styles.themeToggle}
           onPress={() => dispatch(toggleTheme())}
