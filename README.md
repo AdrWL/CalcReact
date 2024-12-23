@@ -1,50 +1,71 @@
-# Welcome to your Expo app 👋
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/46531c1b-d027-4a7f-867d-85442c914e93" />
+</p>
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/905dcfb2-32c4-4c28-89cf-adeb6001b925" />
+</p>
 
-## Get started
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/c1cf13f9-3c27-4c59-8a14-a02ef80c814c" />
+</p>
 
-1. Install dependencies
+Aplikacja CarFuel - OWner
 
-   ```bash
-   npm install
-   ```
+Aplikacja do obliczania spalania paliwa w samochodach oraz zarządzania pojazdami.
 
-2. Start the app
+## Funkcjonalności
 
-   ```bash
-    npx expo start
-   ```
+- Obliczanie spalania paliwa w samochodach
+- Możliwość dodawania i usuwania samochodów z listy
+- Przełączanie między trybem jasnym a ciemnym
+- Intuicyjny interfejs użytkownika
 
-In the output, you'll find options to open the app in a
+## Technologie
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- TypeScript
+- React
+- React Native
+- Redux do zarządzania stanem
+- Expo
+- Ikony svg
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/62d53ca5-3ae7-4b31-8a56-29f2b4a1c73e" />
+</p>
 
-## Get a fresh project
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/42d5dcce-753c-4166-8551-8bfef7a38bd2" />
+</p>
 
-When you're ready, run:
+  ## Instalacja i uruchomienie
+
+1.Sklonuj repozytorium:
 
 ```bash
-npm run reset-project
+git clone https://github.com/AdrWL/CalcReact.git
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2.Przejdź do katalogu projektu:
 
-## Learn more
+```bash
+cd CalcReact
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+3.Zainstaluj zależności:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+npm install
+```
 
-## Join the community
+4.Uruchom aplikację:
 
-Join our community of developers creating universal apps.
+```bash
+npm start
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+5.Uruchom aplikację na androida:
+
+```bash
+a
+```
